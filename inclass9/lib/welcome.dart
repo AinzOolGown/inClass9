@@ -1,10 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:confetti/confetti.dart';
 
-class WelcomePage extends StatelessWidget {
+class WelcomePage extends StatefulWidget {
   final String name;
   final String email;
+  
 
   const WelcomePage({super.key, required this.name, required this.email});
+  
+  State<WelcomePage> createState() => _WelcomePageState();
+}
+
+class _WelcomePageState extends State<WelcomePage> {
+  late ConfettiController _confettiController;
+  void initState() {
+    super.initState();
+    _confettiController = ConfettiController(duration: const Duration(seconds: 3));
+    _confettiController.play();
+  }
+  void dispose() {
+    _confettiController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,13 +34,17 @@ class WelcomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Welcome, $name!',
+          ConfettiWidget(confettiController:   _confettiController, blastDirectionality: BlastDirectionality.explosive, shouldLoop: false, colors: const [Colors.purple, Colors.pink, Colors.yellow, Colors.green],),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Welcome, ${widget.name}!',
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             Text(
-              'Your email $email has been registered successfully.',
+              'Your email ${widget.email} has been registered successfully.',
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
@@ -35,6 +56,7 @@ class WelcomePage extends StatelessWidget {
             ),
           ],
         ),
+          ])
       ),
     );
   }
